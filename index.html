@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Mini Eurovision Voting</title>
 
@@ -10,33 +10,58 @@
 
 body{
     margin:0;
-    padding:40px;
+    padding:30px;
     background:#0b1020;
     color:white;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
     text-align:center;
 }
 
 h1{
-    font-size:48px;
-    margin-bottom:40px;
+    margin-bottom:30px;
+    font-size:42px;
+}
+
+.song-list{
+    max-width:800px;
+    margin:auto;
+}
+
+.song-card{
+    background:rgba(255,255,255,0.08);
+    padding:20px;
+    border-radius:16px;
+    margin-bottom:20px;
+}
+
+.song-title{
+    font-size:24px;
+    margin-bottom:15px;
+    font-weight:bold;
+}
+
+select{
+    padding:10px;
+    border-radius:10px;
+    border:none;
+    font-size:18px;
 }
 
 button{
+    margin-top:30px;
+    padding:15px 30px;
+    font-size:22px;
+    border:none;
+    border-radius:12px;
     background:#ffcc00;
     color:black;
-    border:none;
-    padding:18px 35px;
-    font-size:22px;
-    border-radius:14px;
     cursor:pointer;
     font-weight:bold;
-    margin-bottom:40px;
 }
 
 #results{
-    max-width:700px;
-    margin:auto;
+    max-width:800px;
+    margin:40px auto 0 auto;
 }
 
 .result-row{
@@ -44,10 +69,9 @@ button{
     justify-content:space-between;
     align-items:center;
     background:rgba(255,255,255,0.08);
+    padding:20px;
     margin:15px 0;
-    padding:22px;
     border-radius:16px;
-    font-size:24px;
 
     opacity:0;
     transform:translateY(30px);
@@ -55,8 +79,9 @@ button{
     transition:all 0.8s ease;
 }
 
-.country-score{
+.result-score{
     color:#ffcc00;
+    font-size:24px;
     font-weight:bold;
 }
 
@@ -67,7 +92,9 @@ button{
 
 <h1>Mini Eurovision Voting</h1>
 
-<button onclick="revealResults()">
+<div class="song-list" id="songList"></div>
+
+<button onclick="showResults()">
 Reveal Results
 </button>
 
@@ -75,30 +102,91 @@ Reveal Results
 
 <script>
 
-const contestants = [
+const songs = [
 
-    { name: "Belgium", score: 41 },
-    { name: "Germany", score: 56 },
-    { name: "Spain", score: 65 },
-    { name: "Greece", score: 77 },
-    { name: "France", score: 82 },
-    { name: "Italy", score: 97 },
-    { name: "Sweden", score: 120 }
+{
+    title:"Song 1 - Artist",
+    points:0
+},
+
+{
+    title:"Song 2 - Artist",
+    points:0
+},
+
+{
+    title:"Song 3 - Artist",
+    points:0
+},
+
+{
+    title:"Song 4 - Artist",
+    points:0
+},
+
+{
+    title:"Song 5 - Artist",
+    points:0
+}
 
 ];
 
-async function revealResults(){
+const eurovisionPoints = [
+    0,1,2,3,4,5,6,7,8,10,12
+];
 
-    const resultsContainer =
+const songList =
+    document.getElementById("songList");
+
+songs.forEach((song,index)=>{
+
+    const card =
+        document.createElement("div");
+
+    card.className = "song-card";
+
+    let options = "";
+
+    eurovisionPoints.forEach(point=>{
+
+        options += `
+        <option value="${point}">
+            ${point}
+        </option>
+        `;
+    });
+
+    card.innerHTML = `
+        <div class="song-title">
+            ${song.title}
+        </div>
+
+        <select onchange="updatePoints(${index}, this.value)">
+            ${options}
+        </select>
+    `;
+
+    songList.appendChild(card);
+
+});
+
+function updatePoints(index,value){
+
+    songs[index].points = Number(value);
+
+}
+
+async function showResults(){
+
+    const results =
         document.getElementById("results");
 
-    resultsContainer.innerHTML = "";
+    results.innerHTML = "";
 
-    // Ταξινόμηση από μικρότερο -> μεγαλύτερο
     const sorted =
-        contestants.sort((a,b)=>a.score-b.score);
+        [...songs].sort((a,b)=>a.points-b.points);
 
-    for(const contestant of sorted){
+    for(const song of sorted){
 
         const row =
             document.createElement("div");
@@ -106,22 +194,22 @@ async function revealResults(){
         row.className = "result-row";
 
         row.innerHTML = `
-            <div>${contestant.name}</div>
+            <div>${song.title}</div>
 
-            <div class="country-score">
-                ${contestant.score} pts
+            <div class="result-score">
+                ${song.points} pts
             </div>
         `;
 
-        resultsContainer.appendChild(row);
+        results.appendChild(row);
 
-        // animation
         setTimeout(()=>{
+
             row.style.opacity = "1";
             row.style.transform = "translateY(0)";
+
         },100);
 
-        // ΠΕΡΙΜΕΝΕΙ 2 ΔΕΥΤΕΡΟΛΕΠΤΑ
         await new Promise(resolve =>
             setTimeout(resolve,2000)
         );
