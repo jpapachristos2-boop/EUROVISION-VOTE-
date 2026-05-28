@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eurovision Final — Μυστική Ψηφοφορία</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#003189;--red:#ED2939;--bg:#F7F5F0;--card:#fff;--text:#1a1a2e;--muted:#6b6b7e;--border:rgba(0,0,0,.1);--lb:#E6F1FB}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:3rem}
+.w{max-width:500px;margin:0 auto;padding:1.5rem 1rem}
+.hdr{text-align:center;margin-bottom:1.5rem}
+.flag{font-size:2.2rem;display:block;margin-bottom:.4rem}
+.htitle{font-size:22px;font-weight:500;color:var(--blue)}
+.hsub{font-size:13px;color:var(--muted);margin-top:4px}
+input{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;background:#fff;color:var(--text);margin-bottom:8px}
+input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,49,137,.1)}
+.btn{width:100%;padding:11px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;border:none;border-radius:10px;cursor:pointer;margin-bottom:8px;transition:opacity .15s}
+.bb{background:var(--blue);color:#fff}.bb:hover{opacity:.88}.bb:disabled{opacity:.35;cursor:not-allowed}
+.br{background:var(--red);color:#fff}.br:hover{opacity:.88}
+.bg{background:transparent;color:var(--muted);border:1px solid var(--border)}.bg:hover{background:#eee}
+.rbox{background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:1rem;text-align:center}
+.rcode{font-size:3rem;font-weight:500;letter-spacing:10px;color:var(--blue);font-family:monospace}
+.rlbl{font-size:12px;color:var(--muted);margin-top:5px}
+.vi{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border:1px solid var(--border);border-radius:10px;background:#fff;margin-bottom:6px;font-size:13px}
+.vi.vd{border-color:var(--blue);background:var(--lb);color:#0C447C}
+.badge{font-size:10px;padding:2px 9px;border-radius:20px;background:#eee;color:var(--muted)}
+.bd{background:var(--blue);color:#fff}
+.sc{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1px solid var(--border);border-radius:11px;margin-bottom:7px;background:#fff}
+.sc.sel{border-color:var(--blue);background:var(--lb)}
+.snum{font-size:11px;color:var(--muted);min-width:16px;text-align:right;flex-shrink:0}
+.si{flex:1;min-width:0}
+.st{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc.sel .st{color:var(--blue)}
+.sa{font-size:11px;color:var(--muted)}
+.pr{display:flex;flex-wrap:wrap;gap:3px;justify-content:flex-end}
+.pb{font-size:11px;padding:3px 7px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif}
+.pb:hover:not(.pd){background:#f0f0f5;border-color:#aaa}
+.pa{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:500}
+.pa12{background:var(--red);color:#fff;border-color:var(--red);font-weight:500}
+.pd{opacity:.25;cursor:not-allowed}
+.prog{height:4px;background:#e0e0e0;border-radius:4px;margin-bottom:1rem;overflow:hidden}
+.pf{height:100%;background:var(--blue);border-radius:4px;transition:width .3s}
+.snote{font-size:12px;color:var(--muted);text-align:center;margin-bottom:.6rem}
+.ri{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;margin-bottom:8px;background:#fff}
+.ri.gold{border-color:#F5C518;background:#FAEEDA}
+.ri.silver{border-color:#B4B2A9;background:#F1EFE8}
+.ri.bronze{border-color:#D85A30;background:#FAECE7}
+.med{font-size:1.4rem;min-width:28px;text-align:center}
+.rii{flex:1}
+.rit{font-size:15px;font-weight:500}
+.ria{font-size:12px;color:var(--muted)}
+.rip{font-size:20px;font-weight:500;color:var(--blue)}
+.ril{font-size:10px;color:var(--muted)}
+.bdt{font-size:13px;font-weight:500;margin:8px 0 4px}
+.bdtag{display:inline-flex;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;background:#f0f0f5;color:var(--muted);border:1px solid var(--border);margin:2px}
+.err{font-size:12px;color:#c0392b;margin-bottom:.5rem;text-align:center;min-height:18px}
+.slbl{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.6rem}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,49,137,.2);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:5px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ordiv{display:flex;align-items:center;gap:8px;margin:8px 0;color:var(--muted);font-size:12px}
+.ordiv::before,.ordiv::after{content:'';flex:1;height:1px;background:var(--border)}
+.screen{display:none}
+.screen.active{display:block}
+</style>
+</head>
+<body>
+<div class="w">
+
+<div id="s-home" class="screen active">
+  <div class="hdr"><span class="flag">🇫🇷</span><div class="htitle">Eurovision — Grand Final</div><div class="hsub">Μυστική ψηφοφορία · Διαφορετικές συσκευές</div></div>
+  <div class="slbl">Το όνομά σου</div>
+  <input id="my-name" placeholder="π.χ. Μαρία" />
+  <div class="ordiv">Δημιούργησε ή μπες σε δωμάτιο</div>
+  <button class="btn bb" onclick="createRoom()">Δημιούργησε δωμάτιο</button>
+  <div style="display:flex;gap:8px;align-items:center">
+    <input id="join-code" placeholder="Κωδικός (4 γράμματα)" style="margin-bottom:0;text-transform:uppercase" maxlength="4"/>
+    <button class="btn bg" style="width:auto;padding:11px 18px;margin-bottom:0;flex-shrink:0" onclick="joinRoom()">Είσοδος</button>
+  </div>
+  <div class="err" id="herr"></div>
+</div>
+
+<div id="s-lobby" class="screen">
+  <div class="hdr"><span class="flag">🗳️</span><div class="htitle">Αίθουσα αναμονής</div><div class="hsub" id="lsub">Περιμένουμε...</div></div>
+  <div class="rbox"><div class="rcode" id="rc-display">----</div><div class="rlbl">Στείλε αυτόν τον κωδικό στους υπόλοιπους</div></div>
+  <div class="slbl">Ψηφοφόροι που μπήκαν</div>
+  <div id="lvoters"></div>
+  <button class="btn bb" id="start-btn" onclick="startVoting()" style="display:none">Έναρξη ▶</button>
+  <button class="btn bg" onclick="goHome()">Έξοδος</button>
+</div>
+
+<div id="s-vote" class="screen">
+  <div class="hdr"><span class="flag">🗳️</span><div class="htitle" id="vhdr">Ψηφίζεις</div><div class="hsub">Κάθε βαθμολογία μόνο μία φορά (1–12)</div></div>
+  <div class="prog"><div class="pf" id="pf" style="width:0%"></div></div>
+  <div id="vsongs"></div>
+  <p class="snote" id="vnote"></p>
+  <button class="btn bb" id="vsub" onclick="submitVote()" disabled>Υποβολή ✓</button>
+</div>
+
+<div id="s-waiting" class="screen">
+  <div class="hdr"><span class="flag">✅</span><div class="htitle">Ψήφος καταχωρήθηκε!</div><div class="hsub">Περιμένουμε τους υπόλοιπους...</div></div>
+  <div class="slbl">Κατάσταση</div>
+  <div id="wvoters"></div>
+  <div style="text-align:center;color:var(--muted);font-size:13px;margin-top:1rem"><span class="spin"></span>Αναμονή...</div>
+</div>
+
+<div id="s-results" class="screen">
+  <div class="hdr"><span class="flag">🏆</span><div class="htitle">Αποτελέσματα Τελικού</div><div class="hsub" id="rsub"></div></div>
+  <div id="rlist"></div>
+  <div style="margin-top:1.25rem"><div class="slbl">Αναλυτικά ανά ψηφοφόρο</div><div id="rbd"></div></div>
+  <button class="btn bg" style="margin-top:1rem" onclick="goHome()">↺ Νέα ψηφοφορία</button>
+</div>
+
+</div>
+<script>
+const SONGS=[
+  {title:"Évidemment",artist:"La Zarra"},
+  {title:"Regarde !",artist:"Monroe"},
+  {title:"Voilà",artist:"Barbara Pravi"},
+  {title:"Maman",artist:"Louane"},
+  {title:"J'ai cherché",artist:"Amir"},
+  {title:"Je veux",artist:"Zaz"},
+];
+const PTS=[1,2,3,4,5,6,7,8,10,12];
+const APIKEY='$2a$10$bGh3S5R3jp47aVTni/G/iuKSe9s0IceYeSJaWujOXjAxGyfjxaecS';
+const BASE='https://api.jsonbin.io/v3';
+
+let myName='',roomCode='',binId='',isHost=false,pollTimer=null;
+let curVotes={},usedPts=new Set();
+
+function rndCode(){return Math.random().toString(36).slice(2,6).toUpperCase();}
+
+async function createBin(data){
+  const r=await fetch(`${BASE}/b`,{method:'POST',headers:{'Content-Type':'application/json','X-Master-Key':APIKEY,'X-Bin-Private':'false'},body:JSON.stringify(data)});
+  const d=await r.json();return d.metadata?.id||null;
+}
+async function readBin(id){
+  const r=await fetch(`${BASE}/b/${id}/latest`,{headers:{'X-Master-Key':APIKEY}});
+  const d=await r.json();return d.record||null;
+}
+async function writeBin(id,data){
+  await fetch(`${BASE}/b/${id}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':APIKEY},body:JSON.stringify(data)});
+}
+async function findBinByCode(code){
+  const r=await fetch(`${BASE}/b?meta=true`,{headers:{'X-Master-Key':APIKEY}});
+  const d=await r.json();
+  if(!Array.isArray(d))return null;
+  for(const b of d){
+    try{
+      const rec=await readBin(b.id);
+      if(rec&&rec.code===code)return{id:b.id,data:rec};
+    }catch(e){}
+  }
+  return null;
+}
+
+async function createRoom(){
+  const name=document.getElementById('my-name').value.trim();
+  if(!name){setErr('herr','Γράψε το όνομά σου!');return;}
+  myName=name;isHost=true;roomCode=rndCode();
+  setErr('herr','');
+  const btn=document.querySelector('#s-home .bb');btn.textContent='Δημιουργία...';btn.disabled=true;
+  const room={code:roomCode,host:name,voters:{[name]:{voted:false,votes:{}}},started:false,finished:false};
+  binId=await createBin(room);
+  btn.textContent='Δημιούργησε δωμάτιο';btn.disabled=false;
+  if(!binId){setErr('herr','Σφάλμα σύνδεσης. Δοκίμασε ξανά.');return;}
+  showScreen('s-lobby');
+  document.getElementById('rc-display').textContent=roomCode;
+  startPoll();
+}
+
+async function joinRoom(){
+  const name=document.getElementById('my-name').value.trim();
+  const code=document.getElementById('join-code').value.trim().toUpperCase();
+  if(!name){setErr('herr','Γράψε το όνομά σου!');return;}
+  if(code.length!==4){setErr('herr','Χρειάζονται 4 χαρακτήρες!');return;}
+  myName=name;roomCode=code;isHost=false;
+  setErr('herr','');
+  const jbtn=document.querySelector('#s-home .bg');jbtn.textContent='Αναζήτηση...';jbtn.disabled=true;
+  const found=await findBinByCode(code);
+  jbtn.textContent='Είσοδος';jbtn.disabled=false;
+  if(!found){setErr('herr','Δεν βρέθηκε δωμάτιο με αυτόν τον κωδικό!');return;}
+  binId=found.id;
+  const room=found.data;
+  if(room.started){setErr('herr','Η ψηφοφορία έχει ήδη ξεκινήσει!');return;}
+  room.voters[name]={voted:false,votes:{}};
+  await writeBin(binId,room);
+  showScreen('s-lobby');
+  document.getElementById('rc-display').textContent=roomCode;
+  startPoll();
+}
+
+function startPoll(){
+  if(pollTimer)clearInterval(pollTimer);
+  pollTimer=setInterval(doPoll,3000);
+  doPoll();
+}
+
+async function doPoll(){
+  const room=await readBin(binId);
+  if(!room)return;
+  const cur=currentScreen();
+  if(cur==='s-lobby'){
+    renderLobby(room);
+    if(room.started&&!isHost)goVote();
+  } else if(cur==='s-waiting'){
+    renderWaiting(room);
+    if(room.finished){clearInterval(pollTimer);doResults(room);}
+  }
+}
+
+function renderLobby(room){
+  const vlist=Object.keys(room.voters);
+  document.getElementById('lsub').textContent=vlist.length+' ψηφοφόρος/οι μπήκαν';
+  document.getElementById('lvoters').innerHTML=vlist.map(v=>`
+    <div class="vi${v===room.host?' vd':''}"><span>${v}${v===room.host?' (host)':''}</span><span class="badge bd">✓</span></div>`).join('');
+  if(isHost){
+    const btn=document.getElementById('start-btn');
+    btn.style.display=vlist.length>=2?'block':'none';
+    btn.textContent=`Έναρξη ψηφοφορίας (${vlist.length} άτομα) ▶`;
+  }
+}
+
+async function startVoting(){
+  const room=await readBin(binId);
+  room.started=true;
+  await writeBin(binId,room);
+  clearInterval(pollTimer);
+  goVote();
+}
+
+function goVote(){
+  clearInterval(pollTimer);
+  curVotes={};usedPts=new Set();
+  showScreen('s-vote');
+  document.getElementById('vhdr').textContent='Ψηφίζεις, '+myName;
+  renderVote();
+}
+
+function renderVote(){
+  document.getElementById('vsongs').innerHTML=SONGS.map((s,i)=>{
+    const sel=curVotes[i]!==undefined;
+    return`<div class="sc${sel?' sel':''}">
+      <span class="snum">${i+1}</span>
+      <div class="si"><div class="st">${s.title}</div><div class="sa">${s.artist}</div></div>
+      <div class="pr">${PTS.map(p=>{
+        const isA=curVotes[i]===p,isD=usedPts.has(p)&&!isA;
+        return`<button class="pb${isA?(p===12?' pa12':' pa'):''}${isD?' pd':''}" onclick="cv(${i},${p})">${p}</button>`;
+      }).join('')}</div></div>`;
+  }).join('');
+}
+
+function cv(idx,pts){
+  const prev=curVotes[idx];
+  if(prev!==undefined)usedPts.delete(prev);
+  if(prev===pts){delete curVotes[idx];}else{curVotes[idx]=pts;usedPts.add(pts);}
+  const n=Object.keys(curVotes).length;
+  document.getElementById('vnote').textContent=n+' / '+SONGS.length+' τραγούδια βαθμολογήθηκαν';
+  document.getElementById('vsub').disabled=n<SONGS.length;
+  document.getElementById('pf').style.width=(n/SONGS.length*100)+'%';
+  renderVote();
+}
+
+async function submitVote(){
+  const btn=document.getElementById('vsub');
+  btn.disabled=true;btn.textContent='Αποθήκευση...';
+  const room=await readBin(binId);
+  room.voters[myName].voted=true;
+  room.voters[myName].votes=curVotes;
+  if(Object.values(room.voters).every(v=>v.voted))room.finished=true;
+  await writeBin(binId,room);
+  if(room.finished)doResults(room);
+  else{showScreen('s-waiting');renderWaiting(room);startPoll();}
+}
+
+function renderWaiting(room){
+  document.getElementById('wvoters').innerHTML=Object.entries(room.voters).map(([v,d])=>`
+    <div class="vi${d.voted?' vd':''}"><span>${v}</span><span class="badge${d.voted?' bd':''}">${d.voted?'✓ Ψήφισε':'⏳ Αναμονή'}</span></div>`).join('');
+}
+
+function doResults(room){
+  showScreen('s-results');
+  const voters=Object.keys(room.voters);
+  const totals=SONGS.map((_,i)=>({idx:i,pts:voters.reduce((s,v)=>s+(Number(room.voters[v].votes[i])||0),0)}));
+  totals.sort((a,b)=>b.pts-a.pts);
+  const medals=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣'];
+  const cls=['gold','silver','bronze','','',''];
+  document.getElementById('rsub').textContent=voters.length+' ψηφοφόροι · '+SONGS.length+' τραγούδια';
+  document.getElementById('rlist').innerHTML=totals.map((t,r)=>`
+    <div class="ri ${cls[r]||''}">
+      <span class="med">${medals[r]||''}</span>
+      <div class="rii"><div class="rit">${SONGS[t.idx].title}</div><div class="ria">${SONGS[t.idx].artist}</div></div>
+      <div style="text-align:right"><div class="rip">${t.pts}</div><div class="ril">πόντοι</div></div>
+    </div>`).join('');
+  let bd='';
+  voters.forEach(v=>{
+    const sorted=Object.entries(room.voters[v].votes).sort((a,b)=>b[1]-a[1]);
+    bd+=`<div><div class="bdt">${v}</div><div>${sorted.map(([i,p])=>`<span class="bdtag">${p}pts → ${SONGS[i].title}</span>`).join('')}</div></div>`;
+  });
+  document.getElementById('rbd').innerHTML=bd;
+}
+
+function currentScreen(){
+  for(const id of['s-home','s-lobby','s-vote','s-waiting','s-results']){
+    if(document.getElementById(id).classList.contains('active'))return id;
+  }return 's-home';
+}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function setErr(id,msg){document.getElementById(id).textContent=msg;}
+function goHome(){
+  if(pollTimer)clearInterval(pollTimer);
+  myName='';roomCode='';binId='';isHost=false;curVotes={};usedPts=new Set();
+  document.getElementById('my-name').value='';
+  document.getElementById('join-code').value='';
+  setErr('herr','');
+  showScreen('s-home');
+}
+</script>
+</body>
+</html>
