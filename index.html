@@ -1,120 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Eurovision</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <style>
-        body {
-            background: #0b1020;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 40px;
-        }
+<title>Mini Eurovision Voting</title>
 
-        h1 {
-            font-size: 48px;
-            margin-bottom: 30px;
-        }
+<style>
 
-        button {
-            background: #ffcc00;
-            color: black;
-            border: none;
-            padding: 15px 30px;
-            font-size: 22px;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 40px;
-        }
+body{
+    margin:0;
+    padding:40px;
+    background:#0b1020;
+    color:white;
+    font-family:Arial, sans-serif;
+    text-align:center;
+}
 
-        #results {
-            max-width: 700px;
-            margin: auto;
-        }
+h1{
+    font-size:48px;
+    margin-bottom:40px;
+}
 
-        .result-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255,255,255,0.08);
-            margin: 15px 0;
-            padding: 20px;
-            border-radius: 14px;
-            font-size: 24px;
-            opacity: 0;
-            transform: translateY(30px);
-        }
+button{
+    background:#ffcc00;
+    color:black;
+    border:none;
+    padding:18px 35px;
+    font-size:22px;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:bold;
+    margin-bottom:40px;
+}
 
-        .country-score {
-            color: #ffcc00;
-            font-weight: bold;
-        }
-    </style>
+#results{
+    max-width:700px;
+    margin:auto;
+}
+
+.result-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(255,255,255,0.08);
+    margin:15px 0;
+    padding:22px;
+    border-radius:16px;
+    font-size:24px;
+
+    opacity:0;
+    transform:translateY(30px);
+
+    transition:all 0.8s ease;
+}
+
+.country-score{
+    color:#ffcc00;
+    font-weight:bold;
+}
+
+</style>
 </head>
 
 <body>
 
-    <h1>Mini Eurovision Voting</h1>
+<h1>Mini Eurovision Voting</h1>
 
-    <button onclick="revealResults()">
-        Reveal Results
-    </button>
+<button onclick="revealResults()">
+Reveal Results
+</button>
 
-    <div id="results"></div>
+<div id="results"></div>
 
-    <script>
-        const contestants = [
-            { name: "France", score: 82 },
-            { name: "Belgium", score: 41 },
-            { name: "Italy", score: 97 },
-            { name: "Spain", score: 65 },
-            { name: "Sweden", score: 120 },
-            { name: "Greece", score: 77 },
-            { name: "Germany", score: 56 }
-        ];
+<script>
 
-        const resultsContainer = document.getElementById("results");
+const contestants = [
 
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
+    { name: "Belgium", score: 41 },
+    { name: "Germany", score: 56 },
+    { name: "Spain", score: 65 },
+    { name: "Greece", score: 77 },
+    { name: "France", score: 82 },
+    { name: "Italy", score: 97 },
+    { name: "Sweden", score: 120 }
 
-        async function revealResults() {
+];
 
-            resultsContainer.innerHTML = "";
+async function revealResults(){
 
-            const sorted = contestants.sort((a, b) => a.score - b.score);
+    const resultsContainer =
+        document.getElementById("results");
 
-            for (let i = 0; i < sorted.length; i++) {
+    resultsContainer.innerHTML = "";
 
-                const contestant = sorted[i];
+    // Ταξινόμηση από μικρότερο -> μεγαλύτερο
+    const sorted =
+        contestants.sort((a,b)=>a.score-b.score);
 
-                const row = document.createElement("div");
+    for(const contestant of sorted){
 
-                row.className = "result-row";
+        const row =
+            document.createElement("div");
 
-                row.innerHTML = `
-                    <div>${contestant.name}</div>
-                    <div class="country-score">
-                        ${contestant.score} pts
-                    </div>
-                `;
+        row.className = "result-row";
 
-                resultsContainer.appendChild(row);
+        row.innerHTML = `
+            <div>${contestant.name}</div>
 
-                await sleep(100);
+            <div class="country-score">
+                ${contestant.score} pts
+            </div>
+        `;
 
-                row.style.transition = "all 0.8s ease";
-                row.style.opacity = "1";
-                row.style.transform = "translateY(0)";
+        resultsContainer.appendChild(row);
 
-                await sleep(2000);
-            }
-        }
-    </script>
+        // animation
+        setTimeout(()=>{
+            row.style.opacity = "1";
+            row.style.transform = "translateY(0)";
+        },100);
+
+        // ΠΕΡΙΜΕΝΕΙ 2 ΔΕΥΤΕΡΟΛΕΠΤΑ
+        await new Promise(resolve =>
+            setTimeout(resolve,2000)
+        );
+    }
+}
+
+</script>
 
 </body>
 </html>
